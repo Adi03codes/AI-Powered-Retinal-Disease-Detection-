@@ -1,0 +1,23 @@
+# Build the CNN model
+model = Sequential()
+
+# Add convolutional layers with max pooling
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)))
+model.add(MaxPooling2D(2, 2))
+
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(2, 2))
+
+model.add(Conv2D(128, (3, 3), activation='relu'))
+model.add(MaxPooling2D(2, 2))
+
+# Flatten the data for the fully connected layers
+model.add(Flatten())
+
+# Add fully connected layers
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(len(categories), activation='softmax'))  # Output layer for multi-class classification
+
+# Compile the model
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
