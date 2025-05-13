@@ -1,0 +1,36 @@
+import cv2
+import numpy as np
+import os
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+# Define directories for the dataset
+data_dir = 'path_to_retinal_images'
+categories = ['normal', 'diabetic_retinopathy', 'glaucoma']
+
+# Initialize arrays for data and labels
+data = []
+labels = []
+
+# Load and preprocess images
+for category in categories:
+    category_path = os.path.join(data_dir, category)
+    label = categories.index(category)
+    
+    for img_name in os.listdir(category_path):
+        img_path = os.path.join(category_path, img_name)
+        img = cv2.imread(img_path)
+        img = cv2.resize(img, (224, 224))  # Resize images to 224x224
+        img = img / 255.0  # Normalize image
+        data.append(img)
+        labels.append(label)
+
+data = np.array(data)
+labels = np.array(labels)
+
+# Split dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=42)
